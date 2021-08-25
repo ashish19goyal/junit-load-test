@@ -20,6 +20,9 @@ dependencies {
     // Use JUnit Jupiter API for testing.
     implementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
 
+    // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
+    implementation("org.junit.platform:junit-platform-launcher:1.7.2")
+
     // Use JUnit Jupiter Engine for testing.
     implementation("org.junit.jupiter:junit-jupiter-engine")
 

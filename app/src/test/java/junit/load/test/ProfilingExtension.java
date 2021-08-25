@@ -1,28 +1,29 @@
 package junit.load.test;
 
-import org.junit.jupiter.api.extension.AfterAllCallback;
-import org.junit.jupiter.api.extension.AfterEachCallback;
-import org.junit.jupiter.api.extension.BeforeEachCallback;
-import org.junit.jupiter.api.extension.ExtensionContext;
-
+import org.junit.jupiter.api.extension.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProfilingExtension implements BeforeEachCallback, AfterEachCallback, AfterAllCallback {
+import static junit.load.test.Constants.*;
 
-    private static final String BUILD_FOLDER = System.getProperty("user.dir") + "/build";
-    private static final String LOAD_TEST_FOLDER = "/load-test";
-    private static final String CSV_FILE_NAME = "/test-profiling.csv";
+public class ProfilingExtension implements BeforeEachCallback, AfterEachCallback,
+        AfterAllCallback, BeforeAllCallback {
 
-    private static final String CSV_HEADING = "test-suite,test-method,pass/fail,time-taken\n";
     private static final Map<String,Long> START_TIMING_MAP = new HashMap<>();
+
+    private static boolean testSuiteStarted = false;
+
+    @Override
+    public void beforeAll(ExtensionContext context) throws Exception {
+        startTestSuite();
+    }
 
     @Override
     public void afterAll(ExtensionContext context) throws Exception {
-        System.out.println("After Executing all tests " + context.getDisplayName());
+        writeToCSV("After Executing all tests " + context.getDisplayName()+"\n");
     }
 
     @Override
@@ -71,5 +72,15 @@ public class ProfilingExtension implements BeforeEachCallback, AfterEachCallback
             writer.close();
         }
         return csvFile;
+    }
+
+    private synchronized void startTestSuite() {
+        if (!testSuiteStarted) {
+            File csvFile = new File(BUILD_FOLDER + LOAD_TEST_FOLDER + CSV_FILE_NAME);
+            if (csvFile.exists()) {
+                csvFile.delete();
+            }
+            testSuiteStarted = true;
+        }
     }
 }
