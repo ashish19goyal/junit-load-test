@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith({ProfilingExtension.class, LoadTestExtension.class})
+@ExtendWith({ProfilingExtension.class})
 class ProfilingTest {
 
     @Test
