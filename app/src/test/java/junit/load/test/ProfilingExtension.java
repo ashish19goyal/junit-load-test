@@ -17,17 +17,18 @@ public class ProfilingExtension implements BeforeEachCallback, AfterEachCallback
     private static boolean testSuiteStarted = false;
 
     @Override
-    public void beforeAll(ExtensionContext context) throws Exception {
+    public void beforeAll(ExtensionContext context) {
+        System.out.println("Before Executing all tests " + context.getDisplayName());
         startTestSuite();
     }
 
     @Override
-    public void afterAll(ExtensionContext context) throws Exception {
-        writeToCSV("After Executing all tests " + context.getDisplayName()+"\n");
+    public void afterAll(ExtensionContext context) {
+        System.out.println("After Executing all tests " + context.getDisplayName());
     }
 
     @Override
-    public void beforeEach(ExtensionContext context) throws Exception {
+    public void beforeEach(ExtensionContext context) {
         if (context.getTestMethod().get().getAnnotation(ProfilingConfig.class) != null) {
             String name = context.getTestClass().get().getName() + "_" + context.getDisplayName();
             if (!START_TIMING_MAP.containsKey(name)) {

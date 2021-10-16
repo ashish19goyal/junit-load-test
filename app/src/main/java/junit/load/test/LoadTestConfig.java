@@ -8,4 +8,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface LoadTestConfig {
+    int cycles() default 1;
+    int threads() default 1;
 }

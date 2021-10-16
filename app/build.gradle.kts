@@ -18,16 +18,19 @@ repositories {
 
 dependencies {
     // Use JUnit Jupiter API for testing.
-    implementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
 
     // https://mvnrepository.com/artifact/org.junit.platform/junit-platform-launcher
     implementation("org.junit.platform:junit-platform-launcher:1.7.2")
 
     // Use JUnit Jupiter Engine for testing.
-    implementation("org.junit.jupiter:junit-jupiter-engine")
+    implementation("org.junit.jupiter:junit-jupiter-engine:5.7.2")
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.0-jre")
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")
 }
 
 application {
