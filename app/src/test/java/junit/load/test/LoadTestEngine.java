@@ -10,9 +10,11 @@ import org.junit.platform.engine.*;
 
 public class LoadTestEngine implements TestEngine {
 
-    private CsvHelper csvHelper =
-            new CsvHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_FILE);
-    private LoadTestReporter loadTestReporter = new LoadTestReporter(csvHelper);
+    private FileHelper csvHelper =
+            new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_CSV_FILE);
+    private FileHelper jsonHelper =
+            new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_JSON_FILE);
+    private LoadTestReporter loadTestReporter = new LoadTestReporter(csvHelper, jsonHelper);
     private LoadTestExecutor loadTestExecutor = new LoadTestExecutor(loadTestReporter);
 
     @Override

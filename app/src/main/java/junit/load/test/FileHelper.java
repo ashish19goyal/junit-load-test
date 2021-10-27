@@ -4,13 +4,20 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class CsvHelper {
+public class FileHelper {
     private String folder;
     private String file;
 
-    public CsvHelper(String folder, String file) {
+    public FileHelper(String folder, String file) {
         this.folder = folder;
         this.file = file;
+    }
+
+    public void clear() {
+        File csvFile = new File(folder + file);
+        if (csvFile.exists()) {
+            csvFile.delete();
+        }
     }
 
     public void write(String line) throws IOException {
