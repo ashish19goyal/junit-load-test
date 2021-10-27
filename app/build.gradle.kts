@@ -42,3 +42,9 @@ tasks.test {
     // Use junit platform for unit tests.
     useJUnitPlatform()
 }
+
+tasks.register<Test>("loadtest") {
+    useJUnitPlatform {
+        includeEngines("load-test-engine")
+    }
+}

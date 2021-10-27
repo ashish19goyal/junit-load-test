@@ -29,7 +29,7 @@ public class ProfilingExtension implements BeforeEachCallback, AfterEachCallback
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        if (context.getTestMethod().get().getAnnotation(ProfilingConfig.class) != null) {
+        if (context.getTestMethod().get().getAnnotation(ProfileTest.class) != null) {
             String name = context.getTestClass().get().getName() + "_" + context.getDisplayName();
             if (!START_TIMING_MAP.containsKey(name)) {
                 START_TIMING_MAP.put(name,System.currentTimeMillis());
@@ -39,7 +39,7 @@ public class ProfilingExtension implements BeforeEachCallback, AfterEachCallback
 
     @Override
     public void afterEach(ExtensionContext context) throws Exception {
-        if (context.getTestMethod().get().getAnnotation(ProfilingConfig.class) != null) {
+        if (context.getTestMethod().get().getAnnotation(ProfileTest.class) != null) {
             String name = context.getTestClass().get().getName() + "_" + context.getDisplayName();
             if (!START_TIMING_MAP.containsKey(name)) {
                 return;

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ProfilingTest {
 
     @Test
-    @ProfilingConfig
+    @ProfileTest
     public void multiplyWorks() {
         long product = 1;
         for(int i=1;i<=10;i++){
@@ -20,7 +20,7 @@ class ProfilingTest {
     }
 
     @Test
-    @ProfilingConfig
+    @ProfileTest
     public void sumWorks() {
         long sum = 1;
         for(int i=1;i<=100;i++){

@@ -7,7 +7,12 @@ import org.junit.jupiter.engine.descriptor.JupiterEngineDescriptor;
 import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.jupiter.engine.discovery.DiscoverySelectorResolver;
 import org.junit.platform.engine.*;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class LoadTestEngine implements TestEngine {
 
@@ -72,9 +77,9 @@ public class LoadTestEngine implements TestEngine {
         Method testMethod = descriptor.getTestMethod();
 
         // skipping tests not annotated with load test config annotation
-        LoadTestConfig testConfig = testClass.getAnnotation(LoadTestConfig.class);
-        if (testMethod.getAnnotation(LoadTestConfig.class) != null) {
-            testConfig = testMethod.getAnnotation(LoadTestConfig.class);
+        LoadTest testConfig = testClass.getAnnotation(LoadTest.class);
+        if (testMethod.getAnnotation(LoadTest.class) != null) {
+            testConfig = testMethod.getAnnotation(LoadTest.class);
         }
         if (testConfig == null) {
             System.out.println("Skipping test execution - "+testClass.getName()+"."+testMethod.getName());
@@ -85,14 +90,45 @@ public class LoadTestEngine implements TestEngine {
             int cycles = testConfig.cycles();
             int threads = testConfig.threads();
             Object testObject = testClass.getDeclaredConstructor().newInstance();
-
-            while (cycles-- > 0) {
-                testMethod.invoke(testObject);
+            AtomicInteger errorCounter = new AtomicInteger();
+            if (threads == 1) {
+                while (cycles-- > 0) {
+                    executeAndCaptureMetrics(testMethod, testObject, errorCounter);
+                }
+                return evaluateSuccess(errorCounter, cycles, testConfig.errorThreshold());
             }
+
+            ExecutorService executor = Executors.newFixedThreadPool(threads);
+            while (cycles-- > 0) {
+                Runnable task = () -> {
+                    executeAndCaptureMetrics(testMethod, testObject, errorCounter);
+                };
+                executor.execute(task);
+            }
+            return evaluateSuccess(errorCounter, cycles, testConfig.errorThreshold());
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
+    }
+
+    private void executeAndCaptureMetrics(Method testMethod, Object testObject, AtomicInteger errorCounter) {
+        try{
+            testMethod.invoke(testObject);
+        } catch (InvocationTargetException e) {
+            errorCounter.getAndIncrement();
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean evaluateSuccess(AtomicInteger errorCounter, int cycles, float errorThreshold) {
+        if (errorThreshold == 0) {
+            return errorCounter.get() <= 0;
+        }
+        float errorRate = errorCounter.get()/cycles;
+        return errorRate <= errorThreshold;
     }
 }

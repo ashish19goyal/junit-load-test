@@ -4,17 +4,26 @@
 package junit.load.test;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
 
     @Test
-    @LoadTestConfig(cycles = 3)
+    @LoadTest(cycles = 3)
     void appHasAGreeting() {
         App classUnderTest = new App();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
         System.out.println("app has a greeting test");
     }
 
-    
+    @Test
+    @LoadTest(cycles = 5, errorThreshold = 0)
+    void randomTest() {
+        int random = new Random().nextInt();
+        assertEquals(0, random/2);
+    }
+
 }
