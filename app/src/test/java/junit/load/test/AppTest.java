@@ -23,7 +23,7 @@ class AppTest {
     @LoadTest(cycles = 5, errorThreshold = 0)
     void randomTest() {
         int random = new Random().nextInt();
-        assertEquals(0, random/2);
+        assertEquals(0, random%2);
     }
 
 }
