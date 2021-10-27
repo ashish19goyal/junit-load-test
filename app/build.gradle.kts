@@ -36,11 +36,6 @@ dependencies {
     implementation("org.apache.commons:commons-math3:3.0")
 }
 
-application {
-    // Define the main class for the application.
-    mainClass.set("junit.load.test.App")
-}
-
 tasks.test {
     // Use junit platform for unit tests.
     useJUnitPlatform()

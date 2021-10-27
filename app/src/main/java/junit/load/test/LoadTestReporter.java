@@ -50,12 +50,13 @@ public class LoadTestReporter {
     }
 
     public void generateReport() {
+        System.out.println("Generating load-test report");
         generateCsvReport();
     }
 
     private void generateCsvReport() {
-        System.out.println("generating loadtest csv report");
-        String heading = "test-suite,test-method,time-taken(average),time-taken(median),time-taken(p95),time-taken(p99)";
+        System.out.println("generating load-test csv report");
+        String heading = "test-suite,test-method,time-taken(average),time-taken(median),time-taken(p95),time-taken(p99)\n";
         try {
             csvHelper.write(heading);
         } catch (IOException e) {
@@ -65,6 +66,7 @@ public class LoadTestReporter {
         for (Map.Entry<String,TestResults> entry : results.entrySet()) {
             String testSuite = entry.getValue().testObject.getClass().getName();
             String testMethod = entry.getValue().testMethod.getName();
+            System.out.println("latencies" + entry.getValue().latencies.toString());
             double[] latencies = entry.getValue().latencies.stream().mapToDouble(Long::doubleValue).toArray();
             Percentile percentile = new Percentile();
             percentile.setData(latencies);
@@ -72,7 +74,7 @@ public class LoadTestReporter {
             double median = percentile.evaluate(50.00);
             double p95 = percentile.evaluate(95.00);
             double p99 = percentile.evaluate(99.00);
-            String line = String.format("%s,%s,%d,%d,%d,%d",testSuite,testMethod,average,median,p95,p99);
+            String line = String.format("%s,%s,%.2f,%.2f,%.2f,%.2f\n",testSuite,testMethod,average,median,p95,p99);
             try {
                 csvHelper.write(line);
             } catch (IOException e) {
