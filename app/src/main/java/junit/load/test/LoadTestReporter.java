@@ -1,22 +1,25 @@
 package junit.load.test;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.math3.stat.descriptive.rank.Percentile;
+
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.*;
 
 public class LoadTestReporter {
 
     private Map<String, TestResults> results = new HashMap<>();
     private FileHelper csvHelper;
     private FileHelper jsonHelper;
+    private FileHelper htmlHelper;
 
-    public LoadTestReporter(FileHelper csvHelper, FileHelper jsonHelper) {
+    public LoadTestReporter(FileHelper csvHelper, FileHelper jsonHelper, FileHelper htmlHelper) {
 
         this.csvHelper = csvHelper;
         this.jsonHelper = jsonHelper;
+        this.htmlHelper = htmlHelper;
     }
 
     public void add(Object testObject, Method testMethod, long timeTakenToExecute) {
@@ -48,19 +51,25 @@ public class LoadTestReporter {
         if (errorThreshold == 0) {
             return results.get(key).errorCount.get() <= 0;
         }
-        float errorRate = results.get(key).errorCount.get()/(results.get(key).successCount.get()+results.get(key).errorCount.get());
+        float errorRate = results.get(key).errorCount.get() / (results.get(key).successCount.get() + results.get(key).errorCount.get());
         return errorRate <= errorThreshold;
     }
 
     public void generateReport() {
         System.out.println("Generating load-test reports");
-        generateCsvReport();
-        generateJsonReport();
+        List<TestResultsReport> resultsReport = getResultsReport();
+        generateCsvReport(resultsReport);
+        generateJsonReport(resultsReport);
+        generateHtmlReport(resultsReport);
     }
 
-    private void generateJsonReport() {
+    private void generateHtmlReport(List<TestResultsReport> resultsReport) {
+        System.out.println("generating load-test html report");
+        htmlHelper.copy("load-test.html");
+    }
+
+    private void generateJsonReport(List<TestResultsReport> resultsReport) {
         System.out.println("generating load-test json report");
-        List<TestResultsReport> resultsReport = getResultsReport();
         jsonHelper.clear();
         try {
             jsonHelper.write(new ObjectMapper().writeValueAsString(resultsReport));
@@ -69,7 +78,7 @@ public class LoadTestReporter {
         }
     }
 
-    private void generateCsvReport() {
+    private void generateCsvReport(List<TestResultsReport> resultsReport) {
         System.out.println("generating load-test csv report");
         String heading = "test-suite,test-method,time-taken(average),time-taken(median),time-taken(p95),time-taken(p99)\n";
         try {
@@ -79,9 +88,7 @@ public class LoadTestReporter {
             e.printStackTrace();
         }
 
-        List<TestResultsReport> reportResults = getResultsReport();
-
-        for (TestResultsReport entry : reportResults) {
+        for (TestResultsReport entry : resultsReport) {
             String line = String.format("%s,%s,%.2f,%.2f,%.2f,%.2f\n",
                     entry.testSuite,
                     entry.testMethod,
@@ -100,7 +107,7 @@ public class LoadTestReporter {
     private List<TestResultsReport> getResultsReport() {
         List<TestResultsReport> reportResults = new ArrayList<>();
 
-        for (Map.Entry<String,TestResults> entry : results.entrySet()) {
+        for (Map.Entry<String, TestResults> entry : results.entrySet()) {
             TestResultsReport reportEntry = new TestResultsReport();
             reportEntry.testSuite = entry.getValue().testObject.getClass().getName();
             reportEntry.testMethod = entry.getValue().testMethod.getName();

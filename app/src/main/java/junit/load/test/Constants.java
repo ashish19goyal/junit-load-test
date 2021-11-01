@@ -5,6 +5,7 @@ public class Constants {
     public static final String LOAD_TEST_FOLDER = "/load-test";
     public static final String LOAD_TEST_CSV_FILE = "/results.csv";
     public static final String LOAD_TEST_JSON_FILE = "/results.json";
+    public static final String LOAD_TEST_HTML_FILE = "/index.html";
     public static final String REPORT_FOLDER = "/reports";
     public static final String CSV_FILE_NAME = "/test-profiling.csv";
     public static final String CSV_HEADING = "test-suite,test-method,pass/fail,time-taken\n";

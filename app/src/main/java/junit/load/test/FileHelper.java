@@ -1,8 +1,6 @@
 package junit.load.test;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class FileHelper {
     private String folder;
@@ -27,11 +25,24 @@ public class FileHelper {
         writer.close();
     }
 
+    public void copy(String source) {
+        File destination = new File(folder + file);
+
+        try {
+            InputStream sourceFile = getClass().getClassLoader().getResourceAsStream(source);
+            OutputStream destinationFile = new BufferedOutputStream(new FileOutputStream(destination));
+            byte[] buffer = sourceFile.readAllBytes();
+            destinationFile.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private File getHandle() throws IOException {
         File csvFile = new File(folder + file);
         if (!csvFile.exists()) {
             File loadTestFolder = new File(folder);
-            if(!loadTestFolder.exists()) {
+            if (!loadTestFolder.exists()) {
                 loadTestFolder.mkdir();
             }
             csvFile.createNewFile();

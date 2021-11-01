@@ -14,7 +14,9 @@ public class LoadTestEngine implements TestEngine {
             new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_CSV_FILE);
     private FileHelper jsonHelper =
             new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_JSON_FILE);
-    private LoadTestReporter loadTestReporter = new LoadTestReporter(csvHelper, jsonHelper);
+    private FileHelper htmlHelper =
+            new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_HTML_FILE);
+    private LoadTestReporter loadTestReporter = new LoadTestReporter(csvHelper, jsonHelper, htmlHelper);
     private LoadTestExecutor loadTestExecutor = new LoadTestExecutor(loadTestReporter);
 
     @Override
