@@ -10,7 +10,7 @@ public class TestResultsReport {
     public double p95TimeTaken;
     public double p99TimeTaken;
     public List<Long> latencies;
-    public int successCount;
+    public int iterations;
     public int errorCount;
 
 }

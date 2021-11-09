@@ -80,7 +80,7 @@ public class LoadTestReporter {
 
     private void generateCsvReport(List<TestResultsReport> resultsReport) {
         System.out.println("generating load-test csv report");
-        String heading = "test-suite,test-method,time-taken(average),time-taken(median),time-taken(p95),time-taken(p99)\n";
+        String heading = "test-suite,test-method,iterations,time-taken(average),time-taken(median),time-taken(p95),time-taken(p99)\n";
         try {
             csvHelper.clear();
             csvHelper.write(heading);
@@ -89,9 +89,10 @@ public class LoadTestReporter {
         }
 
         for (TestResultsReport entry : resultsReport) {
-            String line = String.format("%s,%s,%.2f,%.2f,%.2f,%.2f\n",
+            String line = String.format("%s,%s,%d,%.2f,%.2f,%.2f,%.2f\n",
                     entry.testSuite,
                     entry.testMethod,
+                    entry.iterations,
                     entry.averageTimeTaken,
                     entry.medianTimeTaken,
                     entry.p95TimeTaken,
@@ -112,7 +113,7 @@ public class LoadTestReporter {
             reportEntry.testSuite = entry.getValue().testObject.getClass().getName();
             reportEntry.testMethod = entry.getValue().testMethod.getName();
             reportEntry.errorCount = entry.getValue().errorCount.get();
-            reportEntry.successCount = entry.getValue().successCount.get();
+            reportEntry.iterations = entry.getValue().successCount.get() + entry.getValue().errorCount.get();
             reportEntry.latencies = entry.getValue().latencies;
             System.out.println("latencies" + entry.getValue().latencies.toString());
             double[] latencies = entry.getValue().latencies.stream().mapToDouble(Long::doubleValue).toArray();

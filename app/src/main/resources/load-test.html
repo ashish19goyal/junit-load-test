@@ -460,11 +460,43 @@
         return elements;
     }
 
+    function loadClassesData() {
+        fetch("./results.json")
+            .then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                let innerHtml = '';
+                for(let i=0;i<data.length;i++) {
+                    let row = data[i];
+                    let errorRate = row.errorCount / row.iterations * 100;
+                    innerHtml += '<tr> '+
+                        '<td>'+ row.testSuite + '.' + row.testMethod+'</td>'+
+                        '<td>'+row.iterations+'</td>'+
+                        '<td>'+errorRate+'</td>'+
+                        '<td>'+row.averageTimeTaken+'</td>'+
+                        '<td>'+row.p95TimeTaken+'</td>'+
+                        '<td>'+row.p99TimeTaken+'</td>'+
+                    '</tr>';
+                }
+                document.getElementById('tab0').getElementsByTagName('tbody')[0].innerHTML = innerHtml;
+            });
+    }
+
+    function loadPackageData() {
+    }
+
+    function loadFailedTests() {
+    }
+
+    function loadSummary() {
+    }
+
     // Entry point.
 
     window.onload = function() {
         initTabs();
         initControls();
+        loadClassesData();
     };
 } (window, window.document));
 
@@ -514,67 +546,47 @@
     <div id="tabs">
         <ul class="tabLinks">
             <li>
-                <a href="#tab0">Classes</a>
+                <a href="#tab0">Tests</a>
             </li>
             <li>
-                <a href="#tab1">Packages</a>
+                <a href="#tab1">Suites</a>
             </li>
             <li>
                 <a href="#tab2">Failed tests</a>
             </li>
         </ul>
         <div id="tab0" class="tab">
-            <h2>Classes</h2>
+            <h2>Tests</h2>
             <table>
                 <thead>
                 <tr>
-                    <th>Class</th>
-                    <th>Tests Count</th>
-                    <th>Tests Passed</th>
-                    <th>Time-taken (average)</th>
-                    <th>Time-taken (p95)</th>
-                    <th>Time-taken (p99)</th>
-                    <th>Error Rate</th>
+                    <th>Test Name</th>
+                    <th>Iterations</th>
+                    <th>Error Rate (%)</th>
+                    <th>Time-taken (average in ms)</th>
+                    <th>Time-taken (p95 in ms)</th>
+                    <th>Time-taken (p99 in ms)</th>
                 </tr>
                 </thead>
                 <tbody>
-                <!--                <tr>-->
-                <!--                    <td class="failures">-->
-                <!--                        junit.load.test.AppTest-->
-                <!--                    </td>-->
-                <!--                    <td>1</td>-->
-                <!--                    <td>1</td>-->
-                <!--                    <td>0</td>-->
-                <!--                    <td>0.001s</td>-->
-                <!--                    <td class="failures">0%</td>-->
-                <!--                </tr>-->
                 </tbody>
             </table>
         </div>
         <div id="tab1" class="tab">
-            <h2>Packages</h2>
+            <h2>Suites</h2>
             <table>
                 <thead>
                 <tr>
-                    <th>Package</th>
+                    <th>Suite</th>
                     <th>Tests Count</th>
                     <th>Tests Passed</th>
-                    <th>Time-taken (average)</th>
-                    <th>Time-taken (p95)</th>
-                    <th>Time-taken (p99)</th>
-                    <th>Error Rate</th>
+                    <th>Error Rate (%)</th>
+                    <th>Time-taken (average in ms)</th>
+                    <th>Time-taken (p95 in ms)</th>
+                    <th>Time-taken (p99 in ms)</th>
                 </tr>
                 </thead>
                 <tbody>
-                <!--                <tr>-->
-                <!--                    <td class="failures">-->
-                <!--                        junit.load.test-->
-                <!--                    </td>-->
-                <!--                    <td>1</td>-->
-                <!--                    <td>1</td>-->
-                <!--                    <td>0.001s</td>-->
-                <!--                    <td class="failures">0%</td>-->
-                <!--                </tr>-->
                 </tbody>
             </table>
         </div>
