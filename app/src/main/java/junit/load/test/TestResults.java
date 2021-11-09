@@ -11,6 +11,7 @@ public class TestResults {
     public List<Long> latencies = new ArrayList<>();
     public AtomicInteger successCount = new AtomicInteger();
     public AtomicInteger errorCount = new AtomicInteger();
+    public boolean isSuccess = false;
 
     public TestResults(Object testObject, Method testMethod) {
         this.testObject = testObject;

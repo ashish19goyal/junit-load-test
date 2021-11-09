@@ -16,4 +16,17 @@ class AppTest {
         int random = new Random().nextInt();
         assertEquals(0, random%2);
     }
+
+    @Test
+    @LoadTest(cycles = 6, errorThreshold = 0)
+    void surePassTest() {
+        assertEquals(0, 0);
+    }
+
+    @Test
+    @LoadTest(cycles = 3, errorThreshold = 0)
+    void sureFailTest() {
+        assertEquals(1, 0);
+    }
+
 }

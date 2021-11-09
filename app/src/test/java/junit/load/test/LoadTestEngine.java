@@ -42,12 +42,12 @@ public class LoadTestEngine implements TestEngine {
 
         // bind events to execution listener
         listener.executionStarted(engineDescriptor);
-
+        loadTestReporter.markStarted();
         for (TestDescriptor testDescriptor : engineDescriptor.getChildren()) {
             listener.executionStarted(testDescriptor);
             executeTestDescriptor(testDescriptor, listener);
         }
-
+        loadTestReporter.markDone();
         // generate report
         loadTestReporter.generateReport();
 
