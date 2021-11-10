@@ -2,8 +2,13 @@ package junit.load.test;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.platform.engine.TestDescriptor;
 
@@ -48,12 +53,15 @@ public class LoadTestExecutor {
             }
 
             ExecutorService executor = Executors.newFixedThreadPool(threads);
+            List<Callable<Object>> taskList = new ArrayList<>();
             while (cycles-- > 0) {
-                Runnable task = () -> {
+                Callable task = () -> {
                     runIteration(testObject, testMethod);
+                    return null;
                 };
-                executor.execute(task);
+                taskList.add(task);
             }
+            List<Future<Object>> taskResults = executor.invokeAll(taskList);
             return reporter.isSuccess(testObject, testMethod, testConfig.errorThreshold());
 
         } catch (Exception e) {
@@ -66,16 +74,13 @@ public class LoadTestExecutor {
         long start = System.currentTimeMillis();
         try{
             testMethod.invoke(testObject);
-            reporter.markSuccess(testObject, testMethod);
+            reporter.markSuccess(testObject, testMethod, start);
         } catch (InvocationTargetException e) {
-            reporter.markError(testObject, testMethod);
+            reporter.markError(testObject, testMethod, start);
             e.printStackTrace();
         } catch (IllegalAccessException e) {
-            reporter.markError(testObject, testMethod);
+            reporter.markError(testObject, testMethod, start);
             e.printStackTrace();
-        } finally {
-            long totalTimeTaken = System.currentTimeMillis() - start;
-            reporter.add(testObject, testMethod, totalTimeTaken);
         }
     }
 }

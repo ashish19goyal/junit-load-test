@@ -25,39 +25,29 @@ public class LoadTestReporter {
         this.htmlHelper = htmlHelper;
     }
 
-    public void add(Object testObject, Method testMethod, long timeTakenToExecute) {
-        String key = getKey(testObject, testMethod);
-        if (!results.containsKey(key)) {
-            results.put(key, new TestResults(testObject, testMethod));
-        }
-        results.get(key).latencies.add(timeTakenToExecute);
+    public void markSuccess(Object testObject, Method testMethod, long startTime) {
+        long timeTaken = System.currentTimeMillis() - startTime;
+        TestResults result = getThreadSafeResultObject(testObject, testMethod);
+        result.successCount.getAndIncrement();
+        result.latencies.add(timeTaken);
     }
 
-    public void markSuccess(Object testObject, Method testMethod) {
-        String key = getKey(testObject, testMethod);
-        if (!results.containsKey(key)) {
-            results.put(key, new TestResults(testObject, testMethod));
-        }
-        results.get(key).successCount.getAndIncrement();
-    }
-
-    public void markError(Object testObject, Method testMethod) {
-        String key = getKey(testObject, testMethod);
-        if (!results.containsKey(key)) {
-            results.put(key, new TestResults(testObject, testMethod));
-        }
-        results.get(key).errorCount.getAndIncrement();
+    public void markError(Object testObject, Method testMethod, long startTime) {
+        long timeTaken = System.currentTimeMillis() - startTime;
+        TestResults result = getThreadSafeResultObject(testObject, testMethod);
+        result.errorCount.getAndIncrement();
+        result.latencies.add(timeTaken);
     }
 
     public boolean isSuccess(Object testObject, Method testMethod, float errorThreshold) {
-        String key = getKey(testObject, testMethod);
+        TestResults result = getThreadSafeResultObject(testObject, testMethod);
         if (errorThreshold == 0) {
-            results.get(key).isSuccess = results.get(key).errorCount.get() <= 0;
-            return results.get(key).isSuccess;
+            result.isSuccess = result.errorCount.get() <= 0;
+            return result.isSuccess;
         }
-        float errorRate = results.get(key).errorCount.get() / (results.get(key).successCount.get() + results.get(key).errorCount.get());
-        results.get(key).isSuccess = errorRate <= errorThreshold;
-        return results.get(key).isSuccess;
+        float errorRate = result.errorCount.get() / (result.successCount.get() + result.errorCount.get());
+        result.isSuccess = errorRate <= errorThreshold;
+        return result.isSuccess;
     }
 
     public void generateReport() {
@@ -178,8 +168,12 @@ public class LoadTestReporter {
         return result;
     }
 
-    private String getKey(Object testObject, Method testMethod) {
-        return testObject.getClass().getName() + "-" + testMethod.getName();
+    private synchronized TestResults getThreadSafeResultObject(Object testObject, Method testMethod) {
+        String key = testObject.getClass().getName() + "-" + testMethod.getName();
+        if (!results.containsKey(key)) {
+            results.put(key, new TestResults(testObject, testMethod));
+        }
+        return results.get(key);
     }
 
     private double roundOff(double number) {
