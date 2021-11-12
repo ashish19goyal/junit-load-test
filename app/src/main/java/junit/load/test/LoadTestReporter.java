@@ -90,7 +90,6 @@ class LoadTestReporter {
         generateCsvReport(resultsReport);
         generateJsonReport(resultsReport);
         generateHtmlReport();
-        System.out.println("Load testing report is generated. Open this link in browser to access the report - http://localhost:63342/testing/testing.app/build/load-test/index.html ");
     }
 
     /**
