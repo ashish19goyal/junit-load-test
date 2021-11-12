@@ -5,15 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TestResults {
-    public Object testObject;
-    public Method testMethod;
-    public List<Long> latencies = new ArrayList<>();
-    public AtomicInteger successCount = new AtomicInteger();
-    public AtomicInteger errorCount = new AtomicInteger();
-    public boolean isSuccess = false;
+/**
+ * This object is used to capture test results in-memory during test execution
+ * @author Ashish Goyal
+ */
+class TestResults {
+    Object testObject;
+    Method testMethod;
+    List<Long> latencies = new ArrayList<>();
+    AtomicInteger successCount = new AtomicInteger();
+    AtomicInteger errorCount = new AtomicInteger();
+    boolean isSuccess = false;
 
-    public TestResults(Object testObject, Method testMethod) {
+    TestResults(Object testObject, Method testMethod) {
         this.testObject = testObject;
         this.testMethod = testMethod;
     }

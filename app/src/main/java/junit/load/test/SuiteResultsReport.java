@@ -3,7 +3,11 @@ package junit.load.test;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SuiteResultsReport {
+/**
+ * Aggregated test results for test suites
+ * @author Ashish Goyal
+ */
+class SuiteResultsReport {
     public String testSuite;
     public double averageTimeTaken;
     public double medianTimeTaken;

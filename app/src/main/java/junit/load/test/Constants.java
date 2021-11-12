@@ -1,13 +1,15 @@
 package junit.load.test;
 
-public class Constants {
-    public static final String BUILD_FOLDER = System.getProperty("user.dir") + "/build";
-    public static final String LOAD_TEST_FOLDER = "/load-test";
-    public static final String LOAD_TEST_CSV_FILE = "/results.csv";
-    public static final String LOAD_TEST_JSON_FILE = "/results.json";
-    public static final String LOAD_TEST_HTML_FILE = "/index.html";
-    public static final String REPORT_FOLDER = "/reports";
-    public static final String CSV_FILE_NAME = "/test-profiling.csv";
-    public static final String CSV_HEADING = "test-suite,test-method,pass/fail,time-taken\n";
-    public static final String PROFILING_REPORT_FILE = "/profile.html";
+/**
+ * Provides constants to publish the test results reports
+ * This is an internal only class
+ * These constants are not to be used by any external library or application
+ * @author Ashish Goyal
+ */
+class Constants {
+    static final String BUILD_FOLDER = System.getProperty("user.dir") + "/build";
+    static final String LOAD_TEST_FOLDER = "/load-test";
+    static final String LOAD_TEST_CSV_FILE = "/results.csv";
+    static final String LOAD_TEST_JSON_FILE = "/results.json";
+    static final String LOAD_TEST_HTML_FILE = "/index.html";
 }

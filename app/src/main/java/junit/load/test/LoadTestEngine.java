@@ -7,7 +7,14 @@ import org.junit.jupiter.engine.descriptor.JupiterEngineDescriptor;
 import org.junit.jupiter.engine.discovery.DiscoverySelectorResolver;
 import org.junit.platform.engine.*;
 
-
+/**
+ * This is a custom implementation of test engine.
+ * It helps in using junit test engine to define and run load tests
+ * Only the tests annotated with {@link LoadTest} are executed by this engine
+ * The test results report is generated in csv, json and html formats in the build folder
+ * Link to html report - build/load-test/index.html
+ * @author Ashish Goyal
+ */
 public class LoadTestEngine implements TestEngine {
 
     private FileHelper csvHelper =

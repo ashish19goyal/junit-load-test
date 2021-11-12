@@ -12,20 +12,25 @@ import java.util.concurrent.Future;
 import org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor;
 import org.junit.platform.engine.TestDescriptor;
 
-public class LoadTestExecutor {
+/**
+ * This helper class reads the load test config and process a single load test
+ * The results of the test are captured in memory and aggregated with the hep of {@link LoadTestReporter}
+ * @author Ashish Goyal
+ */
+class LoadTestExecutor {
 
     private LoadTestReporter reporter;
 
-    public LoadTestExecutor(LoadTestReporter reporter) {
+    LoadTestExecutor(LoadTestReporter reporter) {
         this.reporter = reporter;
     }
 
     /**
      * Executes the test as per load testing config
      * @param testDescriptor the method to be executed
-     * @return returns whether the test was successful or not
+     * @return whether the test was successful or not
      */
-    public boolean run(TestDescriptor testDescriptor) {
+    boolean run(TestDescriptor testDescriptor) {
         System.out.println("Executing load test " + testDescriptor.getDisplayName());
         TestMethodTestDescriptor descriptor = (TestMethodTestDescriptor) testDescriptor;
         Class<?> testClass = descriptor.getTestClass();
@@ -55,7 +60,7 @@ public class LoadTestExecutor {
             ExecutorService executor = Executors.newFixedThreadPool(threads);
             List<Callable<Object>> taskList = new ArrayList<>();
             while (cycles-- > 0) {
-                Callable task = () -> {
+                Callable<Object> task = () -> {
                     runIteration(testObject, testMethod);
                     return null;
                 };
@@ -70,6 +75,11 @@ public class LoadTestExecutor {
         }
     }
 
+    /**
+     * Invoke a single iteration of the test method and mark it success or failure
+     * @param testObject Reference object to invoke the test method
+     * @param testMethod Test Method to be invoked
+     */
     private void runIteration(Object testObject, Method testMethod) {
         long start = System.currentTimeMillis();
         try{
