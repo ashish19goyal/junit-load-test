@@ -41,9 +41,3 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-math3
     implementation("org.apache.commons:commons-math3:3.0")
 }
-
-//tasks.register<Test>("loadtest") {
-//    useJUnitPlatform {
-//        includeEngines("load-test-engine")
-//    }
-//}

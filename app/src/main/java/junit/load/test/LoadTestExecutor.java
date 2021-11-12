@@ -31,7 +31,6 @@ class LoadTestExecutor {
      * @return whether the test was successful or not
      */
     boolean run(TestDescriptor testDescriptor) {
-        System.out.println("Executing load test " + testDescriptor.getDisplayName());
         TestMethodTestDescriptor descriptor = (TestMethodTestDescriptor) testDescriptor;
         Class<?> testClass = descriptor.getTestClass();
         Method testMethod = descriptor.getTestMethod();
@@ -42,7 +41,6 @@ class LoadTestExecutor {
             testConfig = testMethod.getAnnotation(LoadTest.class);
         }
         if (testConfig == null) {
-            System.out.println("Skipping test execution - "+testClass.getName()+"."+testMethod.getName());
             return true;
         }
 

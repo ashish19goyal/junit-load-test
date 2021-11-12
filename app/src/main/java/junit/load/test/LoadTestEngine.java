@@ -42,7 +42,6 @@ public class LoadTestEngine implements TestEngine {
 
     @Override
     public void execute(ExecutionRequest request) {
-        System.out.println("Executing load test engine");
         // to get the list of all the tests to execute
         TestDescriptor engineDescriptor = request.getRootTestDescriptor();
         EngineExecutionListener listener = request.getEngineExecutionListener();
