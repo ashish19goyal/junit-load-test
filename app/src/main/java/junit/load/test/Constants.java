@@ -13,4 +13,5 @@ class Constants {
     static final String LOAD_TEST_CSV_FILE = "/results.csv";
     static final String LOAD_TEST_JSON_FILE = "/results.json";
     static final String LOAD_TEST_HTML_FILE = "/index.html";
+    static final String LOAD_TEST_JS_FILE = "/results.js";
 }

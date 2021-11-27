@@ -29,7 +29,9 @@ public class LoadTestEngine implements TestEngine {
             new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_JSON_FILE);
     private FileHelper htmlHelper =
             new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_HTML_FILE);
-    private LoadTestReporter loadTestReporter = new LoadTestReporter(csvHelper, jsonHelper, htmlHelper);
+    private FileHelper jsHelper =
+            new FileHelper(Constants.BUILD_FOLDER + Constants.LOAD_TEST_FOLDER, Constants.LOAD_TEST_JS_FILE);
+    private LoadTestReporter loadTestReporter = new LoadTestReporter(csvHelper, jsonHelper, htmlHelper, jsHelper);
     private LoadTestExecutor loadTestExecutor = new LoadTestExecutor(loadTestReporter);
 
     /**

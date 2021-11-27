@@ -272,6 +272,7 @@
 
 
     </style>
+    <script type="text/javascript" src="results.js"></script>
     <script type="text/javascript">
         (function (window, document) {
     "use strict";
@@ -461,16 +462,12 @@
     }
 
     function loadClassesData() {
-        fetch("./results.json")
-            .then(function(response) {
-                return response.json();
-            }).then(function(testData) {
-                let data = testData.tests;
-                let innerHtml = '';
-                for(let i=0;i<data.length;i++) {
-                    let row = data[i];
-                    let errorRate = Math.round(row.errorCount / row.iterations * 100);
-                    innerHtml += '<tr> '+
+        let data = testData.tests;
+        let innerHtml = '';
+        for(let i=0;i<data.length;i++) {
+            let row = data[i];
+            let errorRate = Math.round(row.errorCount / row.iterations * 100);
+            innerHtml += '<tr> '+
                         '<td>'+ row.testSuite + '.' + row.testMethod+'</td>'+
                         '<td>'+row.iterations+'</td>'+
                         '<td>'+errorRate+'</td>'+
@@ -479,22 +476,17 @@
                         '<td>'+row.p95TimeTaken+'</td>'+
                         '<td>'+row.p99TimeTaken+'</td>'+
                     '</tr>';
-                }
-                document.getElementById('tab0').getElementsByTagName('tbody')[0].innerHTML = innerHtml;
-            });
+        }
+        document.getElementById('tab0').getElementsByTagName('tbody')[0].innerHTML = innerHtml;
     }
 
     function loadSuiteData() {
-        fetch("./results.json")
-            .then(function(response) {
-                return response.json();
-            }).then(function(testData) {
-                let data = testData.suites;
-                let innerHtml = '';
-                for(let i=0;i<data.length;i++) {
-                    let row = data[i];
-                    let errorRate = Math.round(row.errorCount / row.iterations * 100);
-                    innerHtml += '<tr> '+
+        let data = testData.suites;
+        let innerHtml = '';
+        for(let i=0;i<data.length;i++) {
+            let row = data[i];
+            let errorRate = Math.round(row.errorCount / row.iterations * 100);
+            innerHtml += '<tr> '+
                         '<td>'+ row.testSuite +'</td>'+
                         '<td>'+row.testCount+'</td>'+
                         '<td>'+row.testPassed+'</td>'+
@@ -503,47 +495,37 @@
                         '<td>'+row.p95TimeTaken+'</td>'+
                         '<td>'+row.p99TimeTaken+'</td>'+
                     '</tr>';
-                }
-                document.getElementById('tab1').getElementsByTagName('tbody')[0].innerHTML = innerHtml;
-            });
+        }
+        document.getElementById('tab1').getElementsByTagName('tbody')[0].innerHTML = innerHtml;
+
     }
 
     function loadFailedTests() {
-        fetch("./results.json")
-            .then(function(response) {
-                return response.json();
-            }).then(function(testData) {
-                let data = testData.tests;
-                let innerHtml = '';
-                for(let i=0;i<data.length;i++) {
-                    let row = data[i];
-                    if (row.status != "pass") {
-                        innerHtml += '<li>'+ row.testSuite + '.' + row.testMethod+'</li>';
-                    }
-                }
-                document.getElementById('tab2').getElementsByTagName('ul')[0].innerHTML = innerHtml;
-            });
+        let data = testData.tests;
+        let innerHtml = '';
+        for(let i=0;i<data.length;i++) {
+            let row = data[i];
+            if (row.status != "pass") {
+                innerHtml += '<li>'+ row.testSuite + '.' + row.testMethod+'</li>';
+            }
+        }
+        document.getElementById('tab2').getElementsByTagName('ul')[0].innerHTML = innerHtml;
     }
 
     function loadSummary() {
-        fetch("./results.json")
-            .then(function(response) {
-                return response.json();
-            }).then(function(testData) {
-                let data = testData.tests;
-                let successCount = 0;
-                for(let i=0;i<data.length;i++) {
-                    let row = data[i];
-                    if (row.status == "pass") {
-                        successCount++;
-                    }
-                }
-                let successRate = Math.round(successCount / data.length * 100);
-                document.getElementById('tests').getElementsByTagName('div')[0].innerHTML = data.length;
-                document.getElementById('failures').getElementsByTagName('div')[0].innerHTML = data.length - successCount;
-                document.getElementById('duration').getElementsByTagName('div')[0].innerHTML = testData.totalDuration + "ms";
-                document.getElementById('successRate').getElementsByTagName('div')[0].innerHTML = successRate + "%";
-            });
+        let data = testData.tests;
+        let successCount = 0;
+        for(let i=0;i<data.length;i++) {
+            let row = data[i];
+            if (row.status == "pass") {
+                successCount++;
+            }
+        }
+        let successRate = Math.round(successCount / data.length * 100);
+        document.getElementById('tests').getElementsByTagName('div')[0].innerHTML = data.length;
+        document.getElementById('failures').getElementsByTagName('div')[0].innerHTML = data.length - successCount;
+        document.getElementById('duration').getElementsByTagName('div')[0].innerHTML = testData.totalDuration + "ms";
+        document.getElementById('successRate').getElementsByTagName('div')[0].innerHTML = successRate + "%";
     }
 
     // Entry point.

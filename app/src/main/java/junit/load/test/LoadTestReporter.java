@@ -22,6 +22,7 @@ class LoadTestReporter {
     private FileHelper csvHelper;
     private FileHelper jsonHelper;
     private FileHelper htmlHelper;
+    private FileHelper jsHelper;
     private long startTime;
     private long totalDuration;
 
@@ -31,10 +32,11 @@ class LoadTestReporter {
      * @param jsonHelper
      * @param htmlHelper
      */
-    LoadTestReporter(FileHelper csvHelper, FileHelper jsonHelper, FileHelper htmlHelper) {
+    LoadTestReporter(FileHelper csvHelper, FileHelper jsonHelper, FileHelper htmlHelper, FileHelper jsHelper) {
         this.csvHelper = csvHelper;
         this.jsonHelper = jsonHelper;
         this.htmlHelper = htmlHelper;
+        this.jsHelper = jsHelper;
     }
 
     /**
@@ -89,7 +91,7 @@ class LoadTestReporter {
         ResultsReport resultsReport = getResultsReport();
         generateCsvReport(resultsReport);
         generateJsonReport(resultsReport);
-        generateHtmlReport();
+        generateHtmlReport(resultsReport);
     }
 
     /**
@@ -110,8 +112,17 @@ class LoadTestReporter {
      * Copies html file from resource to build folder
      * HTML contains JS to parse and load the json report in html format
      */
-    private void generateHtmlReport() {
+    private void generateHtmlReport(ResultsReport resultsReport) {
         htmlHelper.copy("load-test.html");
+        jsHelper.clear();
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            String jsContent = "var testData = " + objectMapper.writeValueAsString(resultsReport) + ";";
+            jsHelper.write(jsContent);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
