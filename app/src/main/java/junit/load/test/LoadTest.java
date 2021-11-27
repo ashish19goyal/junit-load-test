@@ -37,4 +37,15 @@ public @interface LoadTest {
      * @return
      */
     float errorThreshold() default 0;
+
+    /**
+     * Name of the test data file
+     * Test data should be provided as String, int or boolean values in CSV file format
+     * The order of fields in the CSV should match the order of input parameters to the test method
+     * File should be created inside the test/resources folder
+     * Each test case can have its own test data file
+     * Or multiple test cases can share a test data file if they use the same input parameters
+     * @return
+     */
+    String testDataFile() default "";
 }

@@ -1,6 +1,8 @@
 package junit.load.test;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Provides file IO interactions to help publish test results reports
@@ -37,8 +39,8 @@ class FileHelper {
      * @throws IOException
      */
     void write(String line) throws IOException {
-        File csvFile = getHandle();
-        FileWriter writer = new FileWriter(csvFile, true);
+        File fileHandle = getHandle();
+        FileWriter writer = new FileWriter(fileHandle, true);
         writer.append(line);
         writer.close();
     }
@@ -60,20 +62,35 @@ class FileHelper {
         }
     }
 
+    List<String> read() throws IOException {
+        File fileHandle = getHandle();
+        FileReader reader = new FileReader(fileHandle);
+        List<String> lines = new ArrayList<>();
+        BufferedReader br = new BufferedReader(reader);  //creates a buffering character input stream
+        String line;
+        while((line=br.readLine())!=null)
+        {
+            lines.add(line);
+        }
+        br.close();
+        reader.close();
+        return lines;
+    }
+
     /**
      * Create a file if it doesn't exist and return a handle for it
      * @return File handle
      * @throws IOException
      */
     private File getHandle() throws IOException {
-        File csvFile = new File(folder + file);
-        if (!csvFile.exists()) {
+        File fileHandle = new File(folder + file);
+        if (!fileHandle.exists()) {
             File loadTestFolder = new File(folder);
             if (!loadTestFolder.exists()) {
                 loadTestFolder.mkdir();
             }
-            csvFile.createNewFile();
+            fileHandle.createNewFile();
         }
-        return csvFile;
+        return fileHandle;
     }
 }
