@@ -2,19 +2,21 @@
 This library provides a junit test engine to perform load testing.
 
 ## Why should you use this load test engine -
-Junit already provides a lot of capabilities to add unit testing and integration testing to Java projects. However, t is observed that a lot of java projects are not able to write load testing scripts and results using java. The projects that do add load testing code have to go through a lot of trouble to do so. Others, use python scipts or tools like jmeter to add load testing.
+Junit already provides a lot of capabilities to add unit testing and integration testing to Java projects. However, a lot of java projects are not able to write load testing scripts and results using java. The projects that do add load testing code have to go through a lot of trouble to do so. Others, use python scipts or jmeter like tools.
 
 Using other technologies or tools to add load testing has a lot of downsides as listed below
 - involves a learning curve to use the other technologies and tools
 - the dev or CI tool setup becomes more complex with use of multiple tools and technologies
-- multiple tools generate different test reports that are difficult to analyze in combination with unit testing and integration testing reports  
+- multiple tools generate different test reports that are difficult to analyze in combination with unit testing and integration testing reports
+
+This library resolves all of these problems. 
 
 ## How to use the load test engine
 
-### Using with gradle
-Create a java project with gradle. 
+### Create a java project with gradle 
+Currently, this library only works with gradle projects. It will be soon extended to work with other projects.
 
-1. Update the build.gradle file as follows.
+### Update the build.gradle file
 
 Include the load test engine as a test dependency
 ```kotlin
@@ -25,7 +27,7 @@ dependencies {
 }
 ```
 
-Create a task for running load test as follows
+Create a gradle task for running load test as follows
 ```kotlin
 tasks.register<Test>("loadtest") {
     reports.html.required.set(false)
@@ -36,7 +38,8 @@ tasks.register<Test>("loadtest") {
 }
 ```
 
-2. Create load test file as follows
+### Add load tests
+Create a java file with definitions of load tests as follows.
 
 ```java
 import junit.load.test.LoadTest;
@@ -80,13 +83,14 @@ public class AppLoadTest {
 
 ```
 
-3. Run load test for you application with the following gradle command
+### Run load test
+Use following command to run load tests for you application
 ```shell
 gradle loadtest
 ```
 
-4. Load testing reports are published in the build folder. Open the reports in a browser. Location of the reports file
+### Consume load test results
+Load testing reports are published in the build folder. Open the reports in a browser. Location of the reports file
 ```
 build/load-test/index.html
 ```
-
