@@ -21,26 +21,24 @@ dependencies {
 // As described here
 // https://central.sonatype.org/publish/publish-gradle/
 task sourceJar(type: Jar) {
-    classifier "sources"
+    classifier = "sources"
     from sourceSets.main.allJava
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier "javadoc"
+    classifier = "javadoc"
     from javadoc.destinationDir
 }
 
 artifacts {
-    archives jar
-    archives sourceJar
-    archives javadocJar
+    archives javadocJar, sourceJar
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId 'junit-load-test'
-            from components.java
+            groupId = 'io.github.ashish19goyal'
+            artifactId = 'junit-load-test'
 
             pom {
                 name = 'Junit Load Test'
@@ -60,9 +58,9 @@ publishing {
                     }
                 }
                 scm {
-                    url 'scm:git@github.com/ashish19goyal/junit-load-test.git'
-                    connection 'scm:git@github.com/ashish19goyal/junit-load-test.git'
-                    developerConnection 'scm:git@github.com/ashish19goyal/ashish19goyal.git'
+                    url = 'scm:git@github.com/ashish19goyal/junit-load-test.git'
+                    connection = 'scm:git@github.com/ashish19goyal/junit-load-test.git'
+                    developerConnection = 'scm:git@github.com/ashish19goyal/ashish19goyal.git'
                 }
             }
         }
@@ -72,6 +70,10 @@ publishing {
             def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
             def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
         }
     }
 }
