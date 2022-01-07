@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 group = 'io.github.ashish19goyal'
-version = '1.0.0'
+version = '1.0.1'
 
 repositories {
     mavenCentral()
@@ -31,7 +31,12 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 artifacts {
-    archives javadocJar, sourceJar
+    archives javadocJar, sourceJar, jar
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
 
 publishing {
@@ -39,7 +44,9 @@ publishing {
         mavenJava(MavenPublication) {
             groupId = 'io.github.ashish19goyal'
             artifactId = 'junit-load-test'
+            version = '1.0.1'
 
+            from components.java
             pom {
                 name = 'Junit Load Test'
                 description = 'This library provides a junit test engine to perform load testing'
